@@ -1,0 +1,18 @@
+        org 100h
+
+        section .text
+
+        mov	BX, 201h
+        mov     SI, 1h
+
+        mov byte [200h], "J"
+        mov byte [201h], "A"
+        mov byte [202h], "O"
+        mov byte [203h], "F"   
+
+        mov     AL, DS:[200h]
+        mov     CL, [BX]
+        mov     DL, [BX + SI]
+        mov     DI, [BX + 2h] 
+
+        int	20h 
