@@ -1,0 +1,13 @@
+org     100h
+        MOV CH, 00
+        MOV CL, 05 ;Factorial de 5
+        MOV AH, 00
+        MOV AL, 01
+        CMP CL, 00
+        JZ salto
+condic  mul CX
+        LOOP condic
+salto:  MOV [20Ah], AH
+        MOV [20Bh], AL
+
+        int 20h
