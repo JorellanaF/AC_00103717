@@ -33,6 +33,7 @@ sigP:
         MOV [0300H + SI], AL
         INC SI
         LOOP for
+        RET
 
 Impar:
         XOR SI,SI
@@ -55,3 +56,4 @@ sigI:
         MOV [0320H + SI], AL
         INC SI
         LOOP for1
+        RET
