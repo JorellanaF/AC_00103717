@@ -1,0 +1,57 @@
+        org 100h
+
+        section .text
+
+        CALL Par
+        CALL Impar
+        
+
+        INT 20h
+
+        section .data
+arr db 1,2,3,4,5,6,7,8,9,1
+len equ $-arr
+
+Par:
+        XOR SI,SI
+        XOR CX,CX
+        MOV CX, len
+
+for:
+        XOR AX,AX
+        XOR BL,BL
+        MOV BL, 2
+        MOV AL, [arr + SI]
+        IDIV BL
+        CMP AH, 00
+        JZ sigP
+        INC SI
+        LOOP for
+        RET
+sigP:
+        MOV AL, [arr + SI]
+        MOV [0300H + SI], AL
+        INC SI
+        LOOP for
+
+Impar:
+        XOR SI,SI
+        XOR CX,CX
+        MOV CX, len
+
+for1:
+        XOR AX,AX
+        XOR BL,BL
+        MOV BL, 2
+        MOV AL, [arr + SI]
+        IDIV BL
+        CMP AH, 01
+        JZ sigI
+        INC SI
+        LOOP for1
+        RET
+sigI:
+        MOV AL, [arr + SI]
+        MOV [0320H + SI], AL
+        INC SI
+        LOOP for1
