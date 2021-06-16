@@ -32,7 +32,7 @@ org 100h
 
     modotexto: 
         MOV AH, 0h ; activa modo texto
-        MOV AL, 00h ; modo gráfico deseado, 00h denota un tamaño de 40x25 (40 columnas, 25 filas)
+        MOV AL, 03h ; modo gráfico deseado, 03h denota un tamaño de 80x25 (80 columnas, 25 filas)
         INT 10h
         RET
     movercursor:
