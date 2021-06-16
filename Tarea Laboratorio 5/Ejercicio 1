@@ -29,17 +29,18 @@ org 100h
         JB ITERAR ; si DI es menor a 10, entonces que siga iterando.
         jmp esperartecla ; de caso contrario, que salte a esperar tecla.
 
-
     modotexto: 
         MOV AH, 0h ; activa modo texto
         MOV AL, 03h ; modo gráfico deseado, 03h denota un tamaño de 80x25 (80 columnas, 25 filas)
         INT 10h
         RET
+        
     movercursor:
         MOV AH, 02h ; posiciona el cursor en pantalla.
         MOV BH, 0h ; número de página
         INT 10h
         RET
+        
     escribircaracter: ;utilizando interrupcion DOS
         MOV AH, 0Ah ; escribe caracter en pantalla según posición del cursor
         MOV AL, CL ; denotamos el caracter a escribir en pantalla, los valores deben ser según código hexadecimal de tabla ASCII
@@ -64,6 +65,7 @@ org 100h
         INT 16h
         call exit
         RET
+        
     exit:
         INT 20h
 
