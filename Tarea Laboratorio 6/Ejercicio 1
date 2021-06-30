@@ -1,0 +1,98 @@
+	org 	100h
+
+	section	.text
+
+	; print msg1
+	mov 	DX, msg1
+	call  	EscribirCadena
+
+	; Ingresa la nueva contrasenia
+	mov 	BP, newC
+	call  	LeerCadena
+
+	; print msg2
+	mov 	DX, msg2
+	call 	EscribirCadena
+
+	; Ingresa la contrasenia
+	mov 	BP, contra
+	call 	LeerContra
+
+	int 	20h
+
+	section	.data
+
+        msg1	db	"Ingrese nueva contrasenia(5 caracteres) : ", "$"
+        msg2 	db 	10, "Ingrese contrasenia : ", "$"
+        msg3 	db 	10, "BIENVENIDO ", "$"
+        msg4 	db 	10, "INCORRECTO ", "$"
+        newC 	times 	20  	db	" " 	
+        contra  times 	20  	db	" " 
+
+; FUNCIONES
+
+; Permite leer un carácter de la entrada estándar con echo
+; Parámetros:   AH: 07h         
+; Salida:       AL: caracter ASCII leído
+EsperarTecla:
+        mov AH, 01h         
+        int 21h
+        ret
+
+
+; Leer cadena de texto desde el teclado
+; Salida:       SI: longitud de la cadena 		BP: direccion de guardado
+LeerCadena:
+        xor SI, SI          ; SI = 0
+        xor AL, AL
+while:  
+        call    EsperarTecla    ; retorna un caracter en AL
+        cmp SI, 4d
+        je exit
+        mov [BP+SI], AL   	; guardar caracter en memoria
+        inc SI              ; SI++
+        jmp while           ; saltar a while
+exit:
+	mov byte [BP+SI], "$"	; agregar $ al final de la cadena
+        ret
+
+
+; Permite escribir en la salida estándar una cadena de caracteres o string, este
+; debe tener como terminación el carácter “$”
+; Parámetros:	AH: 09h 	DX: dirección de la celda de memoria inicial de la cadena
+EscribirCadena:
+	mov 	AH, 09h
+	int 	21h
+	ret
+
+LeerContra:
+        xor     SI, SI          ; SI = 0
+        xor     AL, AL
+        while1:  
+                call    EsperarTecla    ; retorna un caracter en AL
+                cmp SI, 4d
+                je comparar
+                mov     [BP+SI], AL   	; guardar caracter en memoria
+                inc     SI              ; SI++
+                jmp     while1          ; saltar a while
+
+comparar:      
+        mov 	byte [BP+SI], "$"
+        xor SI, SI
+        xor DI, DI
+        MOV CX, 5
+        lea SI,newC  
+        lea DI,contra 
+        repe CMPSW  ;compara las dos cadenas
+        Jne no_igual ;si fueron igual
+        jmp igual ;Si no fueron iguales
+
+igual:
+        xor DX, DX
+        mov DX, msg3
+        jmp EscribirCadena
+
+no_igual:
+        xor DX, DX
+        mov DX, msg4
+        jmp EscribirCadena
